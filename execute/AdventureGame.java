@@ -1,3 +1,5 @@
+package execute;
+
 import map.Location;
 
 public class AdventureGame {

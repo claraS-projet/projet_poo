@@ -2,7 +2,7 @@ package map;
 import java.util.*;
 
 import items.Item;
-import items.MyCharacter;
+import Character.MyCharacter;
 
 public class Location {
 	private String name;
