@@ -14,5 +14,4 @@ public class MyMap {
 	public void addLocation(Location place) {
 		world.add(place);
 	}
-
 }
