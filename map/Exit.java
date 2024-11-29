@@ -25,4 +25,7 @@ public abstract class Exit {
 	public abstract Boolean canBeCrossed();
 	
 	public abstract void isCrossing();
+	public Location getneighbor() {
+		return wayOut;
+	}
 }
