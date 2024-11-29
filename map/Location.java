@@ -45,9 +45,11 @@ public class Location {
 	}
 	
 	public void describe() { //print the caracteristics of the exits and of this location
-		System.out.println("You are in" + name);
+		System.out.println(description);
 		System.out.println("Possible exits :");
-		System.out.println(exits);
+		for (String exitName : exits.keySet()) {
+			System.out.println("- " + exitName);
+		}
 	}
 	
 	public Exit getExit(String name) { //returns the exit associated to the name in this location
@@ -59,13 +61,5 @@ public class Location {
 			return true;
 		return false;
 	}
-	
-	/*public void cross(String exitName) {
-		if (isContainExit(exitName) && canBecrossed(exitName))
-	}*/
-	
-	public static void main(String[] args) {
-	 Location l = new Location(null, null, null);
-	 System.out.println("test");
-	}
+
 }

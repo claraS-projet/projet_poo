@@ -10,6 +10,9 @@ public class MyMap {
 		this.world = new ArrayList<>();
 		this.worldName = name;
 	}
-
+	
+	public void addLocation(Location place) {
+		world.add(place);
+	}
 
 }

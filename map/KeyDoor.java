@@ -2,22 +2,30 @@ package map;
 
 public class KeyDoor extends Exit {
 	private int keyId;
+	private Boolean isUnlocked;
 	
-	public KeyDoor(Location neighbor) {
-		super(neighbor);
+	public KeyDoor(Location entrance, Location wayOut) {
+		super(entrance, wayOut);
+		this.isOpened = false;
+		this.isUnlocked = false;
 	}
 	
 	public void setKey(int key) {
 		this.keyId = key;
 	}
 
-	public void open (int keyId) {
-		if(this.keyId == keyId) {
+	public void unlocked(int keyId) {
+		if (this.keyId == keyId) {
+			isUnlocked = true;
 			isOpened = true;
+			System.out.println("The door is Unlocked and opened");
 		}
+		System.out.println("Wrong key, try again");
 	}
+	
+	@Override
 	public Boolean canBeCrossed() {
-		if(isOpened = true) {
+		if(isOpened == true) {
 			return true;
 		}
 		return false;

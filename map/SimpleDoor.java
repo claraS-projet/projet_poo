@@ -2,8 +2,8 @@ package map;
 
 public class SimpleDoor extends Exit {
 	
-	public SimpleDoor(Location neighbor) {
-		super(neighbor);
+	public SimpleDoor(Location entrance, Location wayOut) {
+		super(entrance, wayOut);
 	}
 	
 	@Override
