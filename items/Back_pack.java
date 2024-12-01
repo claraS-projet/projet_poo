@@ -1,25 +1,43 @@
 package items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Back_pack extends Item{
-    private ArrayList<Item> item_list;
+    private HashMap<String,Item> item_list;
 
     public Back_pack(){
         super("Back_Pack");
-        item_list = new ArrayList<>();
+        item_list = new HashMap<>();
     }
     public void add_item(Item item){
-        item_list.add(item);
+        item_list.put(item.getName(),item);
     }
 
-    public void remove_item(Item item){
+    public void remove_item(String item){
         item_list.remove(item);
     }
 
     public void print_item_list(){
-        for(Item item : item_list){
-            printItem();
+        for(Item item : item_list.values()){
+            item.printItem();
         }
+    }
+
+    public void taken(){}
+
+    public boolean contains_item(String name){
+        return item_list.containsKey(name);
+    }
+
+    public void describe() {
+        System.out.println("It is the back_pack of your hero, all of his items are inside " +
+                            "except the bow and the sabre");
+        print_item_list();
+    }
+
+    public HashMap<String, Item> getItem_list() {
+        return item_list;
     }
 }

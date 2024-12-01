@@ -1,16 +1,17 @@
 package map;
 import java.util.*;
 import Character.MyCharacter;
+import Commands.Command;
 import items.Item;
 import java.util.HashMap;
 
-public class Location {
+public class Location implements Command {
 	private final String name;
 	private final String description; //What you can see in this place
 	private final String goal;  //how to go to the next room
-	private final HashMap<String, Exit> exits = new HashMap<>(); //All the exits of this location are associated with their name
-	private final ArrayList<MyCharacter> characters;
-	private final HashMap<String, Item> items;
+	private HashMap<String, Exit> exits = new HashMap<>(); //All the exits of this location are associated with their name
+	private ArrayList<MyCharacter> characters;
+	private HashMap<String, Item> items;
 	
 	public Location(String name, String description, String goal) {
 		this.name = name;
@@ -24,7 +25,7 @@ public class Location {
 		items.put(name, myitem);
 	}
 
-	public void remItem(Item myitem) {
+	public void remItem(String myitem) {
 		items.remove(myitem);
 	}
 	
@@ -44,18 +45,38 @@ public class Location {
 		exits.remove(name);
 	}
 
+	@Override
 	public void describe() { //print the caracteristics of the exits and of this location
 		System.out.println(name + " : " + description);
-		System.out.println("Possible exits :");
-		printExits();
+		if (exits.isEmpty()) {
+			System.out.println(name + " has no exits");
+		}else{
+			System.out.println("Possible exits :");
+			printExits();
+		}
+		System.out.println("\n");
 	}
 
 
 	public void printExits() {
-		for (Map.Entry<String, Exit> entry : exits.entrySet()) {
-			Exit exit = entry.getValue();
-			String loc = entry.getKey();
-			System.out.println("The door " + exit + "leads to " + loc);
+		for (Exit exit : exits.values()) {
+			System.out.println("The exit " + exit.getName() + " leads to " + exit.getneighbor().getName());
+		}
+	}
+
+	public void printItems(){
+		for (Map.Entry<String, Item> entry : items.entrySet()) {
+			String name = entry.getKey();
+			Item item = entry.getValue();
+			System.out.println("The item " + name + " : ");
+			item.describe();
+		}
+	}
+
+	public void printCharacters(){
+		for (MyCharacter character : characters) {
+			System.out.println(character.getName());
+			character.describe();
 		}
 	}
 
@@ -76,9 +97,37 @@ public class Location {
 		return items.get(name);
 	}
 
-	public boolean isContainItem(String name) { //true if the location contain an item associated with the name
-        return items.containsKey(name);
+	public boolean isContainsItem(String name) { //true if the location contain an item associated with the name
+        String toUC = name.toUpperCase();
+		return items.containsKey(name);
     }
+
+	public ArrayList<MyCharacter> getCharacters() {
+		return characters;
+	}
+	public HashMap<String, Item> getItems(){
+		return items;
+	}
+
+	public void print_attackable_targets(){
+		for (MyCharacter character : this.characters) {
+			if (character.getHP() > 2){
+				System.out.println("You can attack the : " + character.getName() +
+						           " by using your weapons with USE command");
+			}
+		}
+	}
+
+	public void remove_dead_chars(){
+		Iterator<MyCharacter> it = characters.iterator();
+		while(it.hasNext()){
+			MyCharacter character = it.next();
+			if (character.getHP() <= 0){
+				System.out.println(character.getName() + " IS DEAD.");
+				it.remove();
+			}
+		}
+	}
 
 
 }

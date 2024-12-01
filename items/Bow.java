@@ -29,4 +29,13 @@ public class Bow extends Item {
     public int getNbBurningArrows(){
         return BurningArrows;
     }
+
+    public void describe() {
+        System.out.println("It is the bow of your hero, you can use it with the normal arrows or the burning ones " +
+                            "to fight terrestrial and aerial ennemies.\n" + "NB arrows : " + Arrows + "\nNB burning arrows : "
+                            + BurningArrows);
+
+    }
+
+    public void taken(){}
 }

@@ -1,13 +1,17 @@
 package map;
 
+import Character.Hero;
+
 public abstract class Exit {
+	private String name;
 	protected Boolean isOpened;
 	private Location entrance;
 	private Location wayOut;
 	
-	public Exit(Location entrance, Location wayOut) {
+	public Exit(Location entrance, Location wayOut, String name) {
 		this.entrance = entrance;
 		this.wayOut = wayOut;
+		this.name = name;
 	}
 	
 	public Location getEntrance() {
@@ -21,6 +25,10 @@ public abstract class Exit {
 	public void close() {
 		isOpened = false;
 	}
+
+	public String getName(){
+		return name;
+	}
 	
 	public abstract Boolean canBeCrossed();
 	
@@ -28,4 +36,6 @@ public abstract class Exit {
 	public Location getneighbor() {
 		return wayOut;
 	}
+
+	public abstract boolean hero_unlock(Hero hero);
 }

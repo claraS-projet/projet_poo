@@ -11,6 +11,7 @@ public class CommandWork {
         System.out.println("- TAKE (argument) : Add the argument (item) to the Hero's Back_Pack.");
         System.out.println("- USE (argument 1) (argument 2): Makes the Hero use the argument 1 (with the argument 2 " +
                            "if there is one");
+        System.out.println("- ASKG : used to ask for guide help");
         System.out.println("- QUIT : Used to quit the game.");
     }
 }

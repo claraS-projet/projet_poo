@@ -5,7 +5,6 @@ import Character.Hero;
 
 public interface Command {
 
-    void gameLoop(Hero hero);
 
     static String[] read(String cmd){
 
@@ -17,4 +16,6 @@ public interface Command {
         System.out.println("Command Read");
         return words;
     }
+
+    public void describe();
 }
