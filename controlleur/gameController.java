@@ -10,6 +10,7 @@ public class gameController {
     private gameState gameState;
     private StackPane root;
     private mainContainer currentView;
+    private locationView currlocationView;
 
     public gameController(gameState gameState, StackPane root) {
         this.gameState = gameState;
@@ -41,5 +42,12 @@ public class gameController {
     }
     public mainContainer getCurrentView() {
         return currentView;
+    }
+
+    public void setCurrentlocView(locationView currentView) {
+        this.currlocationView = currentView;
+    }
+    public locationView getCurrlocationView() {
+        return currlocationView;
     }
 }

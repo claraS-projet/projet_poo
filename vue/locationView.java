@@ -1,5 +1,7 @@
 package vue;
 
+import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,20 +12,38 @@ import controlleur.gameController;
 import modele.AddedForGUI.gameState;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class locationView extends Pane {
     private gameState gameState;
     private gameController controller;
-    private ImageView heroSprite;
+    private characterView hero;
     private Location location;
+    private final Set<KeyCode> keysPressed = new HashSet<>();
 
     public locationView(Location loc, gameController controller) {
+        super();
+
         this.location = loc;
         this.controller = controller;
+
         this.prefWidthProperty().bind(controller.getRoot().widthProperty());
         this.prefHeightProperty().bind(controller.getRoot().heightProperty());
+
         drawLocation(controller);
         drawHero(controller);
+
+        this.setFocusTraversable(true); // Obligatoire pour capter les touches
+        this.setOnKeyPressed(e -> {
+            keysPressed.add(e.getCode());
+            handleMovement();
+        });
+
+        this.setOnKeyReleased(e -> {
+            keysPressed.remove(e.getCode());
+        });
+
 
     }
 
@@ -37,6 +57,7 @@ public class locationView extends Pane {
         ImageView locView = new ImageView(locBg);
         locView.setFitWidth(700);
         locView.setFitHeight(500);
+
 
         locView.setPreserveRatio(false); // ou true si tu veux garder les proportions
         locView.setSmooth(true);
@@ -55,9 +76,14 @@ public class locationView extends Pane {
         clip.heightProperty().bind(this.heightProperty());
 
         this.setClip(clip);
+        Platform.runLater(() -> this.requestFocus());
         //drawBackground();
         //drawHero();
         // drawItems(), drawCharacters(), drawExits() à ajouter ensuite
+
+
+
+        controller.setCurrentlocView(this);
     }
 
     private void drawBackground() {
@@ -69,16 +95,13 @@ public class locationView extends Pane {
 
     private void drawHero() {
         Image heroImg = new Image("file:resources/sprites/hero.png");
-        heroSprite = new ImageView(heroImg);
+        ImageView heroSprite = new ImageView(heroImg);
         heroSprite.setX(400); // à remplacer plus tard par une coordonnée logique
         heroSprite.setY(300);
         this.getChildren().add(heroSprite);
     }
 
-    public void moveHero(double dx, double dy) {
-        heroSprite.setX(heroSprite.getX() + dx);
-        heroSprite.setY(heroSprite.getY() + dy);
-    }
+
 
     public boolean tryGo() {
         // Tu pourrais par exemple ici :
@@ -89,7 +112,7 @@ public class locationView extends Pane {
 
     public void drawHero(gameController controller) {
         characterView hero = new characterView(
-                this, 0, 0, 60, 60,
+                controller.getCurrlocationView(), 40, 400,
                 "/characters/hero/astronautB_N.png",
                 "/characters/hero/astronautB_NE.png",
                 "/characters/hero/astronautB_E.png",
@@ -101,10 +124,32 @@ public class locationView extends Pane {
         );
         this.getChildren().add(hero);
         hero.bindToBottomCenter(this);
-        hero.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+        //hero.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+
     }
 
+    private void handleMovement() {
+        double dx = 0;
+        double dy = 0;
+        double speed = 10;
 
+        if (keysPressed.contains(KeyCode.UP) || keysPressed.contains(KeyCode.Z)) dy -= speed;
+        if (keysPressed.contains(KeyCode.DOWN) || keysPressed.contains(KeyCode.S)) dy += speed;
+        if (keysPressed.contains(KeyCode.LEFT) || keysPressed.contains(KeyCode.Q)) dx -= speed;
+        if (keysPressed.contains(KeyCode.RIGHT) || keysPressed.contains(KeyCode.D)) dx += speed;
+
+        if (dx != 0 || dy != 0) {
+            hero.move(dx, dy); // ← appelle la méthode move() de ton characterView
+        }
+    }
+
+    public void setHero(characterView hero){
+            this.hero = hero;
+    }
+
+    public characterView setHero(){
+        return this.hero;
+    }
 
 
 }
