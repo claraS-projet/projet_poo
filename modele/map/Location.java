@@ -1,5 +1,7 @@
 package modele.map;
 import java.util.*;
+
+import modele.Character.Guide;
 import modele.Character.MyCharacter;
 import modele.Commands.Command;
 import modele.items.Item;
@@ -12,6 +14,7 @@ public class Location implements Command {
 	private HashMap<String, Exit> exits = new HashMap<>(); //All the exits of this location are associated with their name
 	private ArrayList<MyCharacter> characters;
 	private HashMap<String, Item> items;
+
 	
 	public Location(String name, String description, String goal) {
 		this.name = name;
@@ -79,6 +82,20 @@ public class Location implements Command {
 			character.describe();
 		}
 	}
+	public Guide getGuide(){
+		Guide myg = null;
+		for (MyCharacter character : characters) {
+			if (character instanceof Guide){
+				myg = (Guide) character;
+			}
+		}
+		if (myg != null) {
+			return myg;
+		}
+		else{
+			System.out.println("pas de guide ici");
+			return myg;}
+	}
 
 	public String getName(){
 		return name;
@@ -87,6 +104,9 @@ public class Location implements Command {
 
 	public Exit getExit(String name) { //returns the exit associated to the name in this location
 		return exits.get(name);
+	}
+	public HashMap<String, Exit> getExits() { //returns the exit associated to the name in this location
+		return exits;
 	}
 	
 	public boolean isContainExit(String name) { //true if the location contain an exit associated with the name

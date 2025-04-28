@@ -24,7 +24,7 @@ public class game_Init {
         Location uranus = new Location("URANUS", "If you are here, congratulations! You reached your Goal ! You win!", " ");
 
         //CREATION OF THE HERO
-        Hero hero = new Hero("HERO", 20, earth);
+        Hero hero = new Hero("HERO", 20, earth, "URANUS", "SATURN", "FINISHED");
 
         //CREATION OF THE MAP
         MyMap gameMap = new MyMap("SOLAR SYSTEM", hero);
@@ -160,10 +160,12 @@ public class game_Init {
         //CREATION OF THE DOCTORS OF THE LOCATIONS
         Doctor jupiterdoctor = new Doctor("JUPITER_DOCTOR", 2);
         Doctor venusdoctor = new Doctor("VENUS_DOCTOR", 2);
+        Doctor earthdoctor = new Doctor("EARTH_DOCTOR", 2);
 
         //ADDING THE DOCTORS TO THE LOCATIONS
         jupiter.addChar(jupiterdoctor);
         venus.addChar(venusdoctor);
+        earth.addChar(earthdoctor);
 
         //CREATION OF THE ITEMS OF THE LOCATIONS
         Food saturnfood = new Food("FOOD");

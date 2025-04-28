@@ -83,8 +83,8 @@ public class MyCommands implements Command{
 
     public void GO(String command, Hero hero) {
         String[] phrase = Command.read(command);
-        if (phrase.length == 2){
-             String toUC = phrase[1].toUpperCase();
+        if (phrase.length == 1){
+             String toUC = phrase[0].toUpperCase();
              hero.setPosition(toUC);
         }
         else{

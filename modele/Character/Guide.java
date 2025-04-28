@@ -1,6 +1,7 @@
 package modele.Character;
 
 import modele.items.Item;
+import modele.map.CodeDoor;
 
 public class Guide extends MyCharacter{
     // THIS CHARACTER IS A FRIEND OF THE HERO,
@@ -43,11 +44,23 @@ public class Guide extends MyCharacter{
     public void attack(MyCharacter hero){}
 
     public void mission(Hero hero){
-        if (this.key != null) {
+
+        if (this.key != null && hero.locContainsKeyD()) {
             hero.getPosition().addItem(key.getName(), key);
             hero.addItemToBackpack(this.key.getName());
             this.setKey(null);
         }
+        CodeDoor cd = (CodeDoor)hero.locCodeD();
+        if (hero.locContainsCodeD() && cd != null && cd.getWayOut().getName() != hero.getGoal()) {
+            hero.addCode(cd.getcode());
+        }
+        if(hero.getPosition().getName() == hero.getLocCodegoal()){
+            hero.addCode(hero.getGoalCode());
+        }
+
+    }
+    public String getmsg(){
+        return this.message;
     }
 
 }

@@ -1,9 +1,18 @@
 package vue;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+import modele.map.CodeDoor;
+import modele.map.KeyDoor;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -33,8 +42,8 @@ public class characterView extends Pane {
         this.width = panesize;
         this.height = panesize;
 
-        this.setPrefWidth(width);
-        this.setPrefHeight(height);
+        //this.setPrefWidth(width);
+        //this.setPrefHeight(height);
 
         this.imageN = new Image(northPath);
         if (imageN.isError()) {
@@ -77,10 +86,95 @@ public class characterView extends Pane {
     }
 
     public void move(double dx, double dy) {
+
+        double odlX = getLayoutX();
+        double odlY = getLayoutY();
+
         double margin = 10;
 
-        double newX = getLayoutX() + dx;
-        double newY = getLayoutY() + dy;
+        double newX = odlX + dx;
+        double newY = odlY + dy;
+
+        double hitboxMargin = 8;
+
+        Bounds heroBounds = new BoundingBox(
+                newX + hitboxMargin,
+                newY + hitboxMargin,
+                getPrefWidth() - hitboxMargin,
+                getPrefHeight() - hitboxMargin
+        );
+
+
+
+        for (Node node : locationView.getChildren()) {
+            double heroCenterX = newX + getPrefWidth() / 2.0;
+            double heroCenterY = newY + getPrefHeight() / 2.0;
+            if (node instanceof exitView exit) {
+                Bounds exitBounds = new BoundingBox(
+                        exit.getLayoutX() + 6,
+                        exit.getLayoutY() - 2,
+                        exit.getPrefWidth() + 2,
+                        exit.getPrefHeight() - 20
+                );
+
+                double exitCenterX = exit.getLayoutX() + exit.getPrefWidth() / 2.0;
+                double exitCenterY = exit.getLayoutY() + exit.getPrefHeight() / 2.0;
+                if (heroBounds.intersects(exitBounds)) {
+                    // Le mouvement pousse vers le centre du vaisseau
+                    if ((dx > 0 && heroCenterX < exitCenterX) ||
+                            (dx < 0 && heroCenterX > exitCenterX) ||
+                            (dy > 0 && heroCenterY < exitCenterY) ||
+                            (dy < 0 && heroCenterY > exitCenterY)) {
+
+                        locationView.showExitMessage(exit);
+                        return;
+                    }
+                }
+            }
+            if (node instanceof guideView guide) {
+                Bounds exitBounds = new BoundingBox(
+                    guide.getLayoutX() + 6,
+                        guide.getLayoutY() - 6,
+                        guide.getPrefWidth() - 8,
+                        guide.getPrefHeight() - 10
+                );
+                double exitCenterX = guide.getLayoutX() + guide.getPrefWidth() / 2.0;
+                double exitCenterY = guide.getLayoutY() + guide.getPrefHeight() / 2.0;
+                if (heroBounds.intersects(exitBounds)) {
+                    // Le mouvement pousse vers le centre du vaisseau
+                    if ((dx > 0 && heroCenterX < exitCenterX) ||
+                            (dx < 0 && heroCenterX > exitCenterX) ||
+                            (dy > 0 && heroCenterY < exitCenterY) ||
+                            (dy < 0 && heroCenterY > exitCenterY)) {
+
+                        locationView.showGuideExitMessage();
+                        return;
+                    }
+                }
+            }
+            if (node instanceof doctorView guide) {
+                Bounds exitBounds = new BoundingBox(
+                        guide.getLayoutX() + 6,
+                        guide.getLayoutY() - 6,
+                        guide.getPrefWidth() - 8,
+                        guide.getPrefHeight() - 10
+                );
+                double exitCenterX = guide.getLayoutX() + guide.getPrefWidth() / 2.0;
+                double exitCenterY = guide.getLayoutY() + guide.getPrefHeight() / 2.0;
+                if (heroBounds.intersects(exitBounds)) {
+                    // Le mouvement pousse vers le centre du vaisseau
+                    if ((dx > 0 && heroCenterX < exitCenterX) ||
+                            (dx < 0 && heroCenterX > exitCenterX) ||
+                            (dy > 0 && heroCenterY < exitCenterY) ||
+                            (dy < 0 && heroCenterY > exitCenterY)) {
+
+                        locationView.doctorInteraction();
+                        return;
+                    }
+                }
+            }
+        }
+
 
         double maxX = locationView.getWidth() - getPrefWidth() - margin;
         double maxY = locationView.getHeight() - getPrefHeight() - margin;
@@ -95,6 +189,7 @@ public class characterView extends Pane {
 
         setLayoutX(newX);
         setLayoutY(newY);
+        this.toFront();
 
         // Affichage du sprite selon direction
         if (dx > 0 && dy < 0) characterImage.setImage(imageNE);
@@ -106,6 +201,8 @@ public class characterView extends Pane {
         else if (dy > 0) characterImage.setImage(imageS);
         else if (dy < 0) characterImage.setImage(imageN);
     }
+
+
 
 
 
@@ -122,6 +219,11 @@ public class characterView extends Pane {
                 container.heightProperty().subtract(this.prefHeightProperty()).subtract(20)
         );
 
+    }
+
+    public Point2D getCenter() {
+        return new Point2D(getLayoutX() + getBoundsInLocal().getWidth() / 2,
+                getLayoutY() + getBoundsInLocal().getHeight() / 2);
     }
 
 

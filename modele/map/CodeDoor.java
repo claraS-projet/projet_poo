@@ -2,6 +2,7 @@ package modele.map;
 
 import modele.Character.Hero;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CodeDoor extends Exit{
@@ -21,16 +22,19 @@ public class CodeDoor extends Exit{
 	public boolean hero_unlock(Hero hero) {
 		if (!isUnlocked) {
 			System.out.println("the exit is a CODEDOOR, write a code to go through it : ");
-			Scanner scanner = new Scanner(System.in);
-			String word = scanner.nextLine().toUpperCase();
-			if (this.code.equals(word)) {
-				isUnlocked = true;
-				System.out.println("The code_door is Unlocked, exit crossed successfully");
-				return true;
-			} else {
-				System.out.println("Wrong code, check your entry or ask the guide");
-				return false;
+			//Scanner scanner = new Scanner(System.in);
+			ArrayList<String> word = hero.getCodes();
+			boolean found = false;
+			for (String word1 : word) {
+				if (this.code.equals(word1)) {
+					isUnlocked = true;
+					System.out.println("The code_door is Unlocked, exit crossed successfully");
+					found = true;
+				} else {
+					System.out.println("Wrong code, check your entry or ask the guide");
+				}
 			}
+			return found;
 		}
 		else return true;
 	}

@@ -78,4 +78,8 @@ public class mainContainer extends HBox {
         locationView newLocView = new locationView(loc, controller);
         locationPane.getChildren().add(newLocView);
     }
+
+    public ui_Vbox getUiPane() {
+        return uiPane;
+    }
 }

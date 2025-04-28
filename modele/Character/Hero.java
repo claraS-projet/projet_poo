@@ -1,6 +1,5 @@
 package modele.Character;
 
-import modele.Commands.Command;
 import modele.items.*;
 import modele.map.*;
 
@@ -8,6 +7,8 @@ import modele.map.*;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Hero extends MyCharacter{
 
@@ -16,6 +17,11 @@ public class Hero extends MyCharacter{
     private Sabre H_sabre;
     private Back_pack backpack;
     private Location H_position;
+    private ArrayList<String> Codes;
+    private String goal;
+    private String locCodegoal;
+    private String goalCode;
+
 
     @Override
     public void describe() {
@@ -23,12 +29,16 @@ public class Hero extends MyCharacter{
                 " your health points : " + this.getHP());
     }
 
-    public Hero(String name, int hp, Location loc){
+    public Hero(String name, int hp, Location loc, String goal, String locgoalcode, String cd){
         super(name, hp);
         H_bow = new Bow();
         H_sabre = new Sabre();
         backpack = new Back_pack();
         H_position = loc;
+        this.goal = goal;
+        this.locCodegoal = locgoalcode;
+        Codes = new ArrayList<>();
+        goalCode = cd;
     }
 
     @Override
@@ -109,5 +119,64 @@ public class Hero extends MyCharacter{
     }
 
     public void mission(Hero hero){}
+    public ArrayList<String> getCodes(){
+        return Codes;
+    }
 
+    public void addCode(String code){
+        this.Codes.add(code);
+    }
+    /*public void setCurrLocCode(String code){
+        this.Codes = code;
+    }
+
+    public void setwinCode(String code){
+        this.winCode = code;
+    }*/
+
+    public boolean locContainsKeyD(){
+        boolean found = false;
+        HashMap<String, Exit> exits = this.H_position.getExits();
+        for(Map.Entry<String, Exit> exit : exits.entrySet()){
+            Exit ext = exit.getValue();
+            if (ext instanceof KeyDoor){
+                found = true;
+            }
+        }
+        return found;
+    }
+    public boolean locContainsCodeD(){
+        boolean found = false;
+        HashMap<String, Exit> exits = this.H_position.getExits();
+        for(Map.Entry<String, Exit> exit : exits.entrySet()){
+            Exit ext = exit.getValue();
+            if (ext instanceof CodeDoor){
+                found = true;
+            }
+        }
+        return found;
+    }
+
+    public Exit locCodeD(){
+        HashMap<String, Exit> exits = this.H_position.getExits();
+        for(Map.Entry<String, Exit> exit : exits.entrySet()){
+            Exit ext = exit.getValue();
+            if (ext instanceof CodeDoor){
+                return ext;
+            }
+        }
+        System.out.println("No exit found");
+        return null;
+    }
+
+    public String getGoal(){
+        return goal;
+    }
+
+    public String getLocCodegoal(){
+        return locCodegoal;
+    }
+    public String getGoalCode(){
+        return this.goalCode;
+    }
 }
